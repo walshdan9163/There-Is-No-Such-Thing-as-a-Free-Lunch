@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>No Such Thing as a Free Lunch</h1>
+        <h1>There Is No Such Thing as a Free Lunch</h1>
       </header>
       <div className="App-body">
         <Menu />
