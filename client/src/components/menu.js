@@ -26,7 +26,7 @@ function Menu() {
 
   const [costs, setCosts] = useState(defaultCost);
   const [tipAndFees, setTipAndFees] = useState(0);
-  const [prorate, setProrate] = useState(false);
+  const [prorate, setProrate] = useState(0);
 
   const calculateCosts = () => {
     const taxRate = 0.07;
@@ -50,7 +50,8 @@ function Menu() {
   }
 
   const handleProrateChange = event => {
-    setProrate(event.target.value);
+    console.log(event.target.checked);
+    setProrate(event.target.checked);
   }
 
   const addNewCost = () => {
@@ -81,7 +82,7 @@ function Menu() {
             <input
               name="tipAndFees"
               type="checkbox"
-              value={prorate}
+              check={prorate.checked}
               onChange={handleProrateChange}
             />
           </div>
