@@ -57,7 +57,6 @@ function calcNewCost(cost, taxRate, prorate, tipAndFees, totalCost, numParticipa
     else{
         extraCost = (tipAndFees / numParticipants);
     }
-    console.log(extraCost);
     const participantCost = (taxCost + extraCost + cost);
     return participantCost.toFixed(2);
 }
