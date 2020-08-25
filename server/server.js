@@ -1,15 +1,22 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const bodyParser = require('body-parser');
 const e = require("express");
 
+app.set("port", process.env.PORT || 3001);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.set("port", process.env.PORT || 3001);
+
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/../client/build/index.html'));
+  });
 
 app.post("/api/calculate", (req, res) => {
     const tipAndFees = parseFloat(req.body.tipAndFees);
