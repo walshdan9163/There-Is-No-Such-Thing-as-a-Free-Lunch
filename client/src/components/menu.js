@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 import '../css/menu.css';
 
+import Container from 'react-bootstrap/Container';
+import Table from 'react-bootstrap/Table';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+
 function CalculateValues(taxRate, prorate, tipAndFees, costs){
   return fetch('/api/calculate', {
     method: 'POST',
@@ -59,50 +65,47 @@ function Menu() {
   };
 
   return (
-    <div className="table">
-      <div className="table-row">
-          <div className="table-data">
-            <div>Tip and Fees:</div>
-          </div>
-          <div className="table-data">
+    <Container>
+      <Row>
+        <Col>
+          <div className="tips-and-fees">
+            <h3>
+              Tip and Fees:
+            </h3>
             <input
               name="tipAndFees"
               type="number"
               value={tipAndFees}
               onChange={handleTipAndFeesChange}
             />
-        </div>
-      </div>
-      <div className="prorate">
-        <div className="table-row">
-          <div className="table-data">
-            <div>Prorate?</div>
           </div>
-          <div className="table-data">
-            <input
-              name="tipAndFees"
-              type="checkbox"
-              check={prorate.checked}
-              onChange={handleProrateChange}
-            />
+        </Col>
+        <Col>
+          <div className="prorate">
+              <h3>
+                Split tips and fees proportionally?
+              </h3>
+              <input
+                name="prorate"
+                type="checkbox"
+                check={prorate.checked}
+                onChange={handleProrateChange}
+              />
           </div>
-        </div>
-      </div>
-      <div className="table-content">
-        <div className="table-header">
-          <div className="table-row">
-            <div className="table-data">
-              <div>Participant</div>
-            </div>
-            <div className="table-data">
-              <div>Meal Cost</div>
-            </div>
-          </div>
-        </div>
-        <div className="table-body">
+        </Col>
+      </Row>
+      <div>
+      <Table bordered hover>
+        <thead>
+          <tr>
+            <th>Participant Name</th>
+            <th>Meal Cost</th>
+          </tr>
+        </thead>
+        <tbody className="scrollable-table">
           {costs.map((item, index) => (
-            <div className="table-row" key={index}>
-              <div className="table-data">
+            <tr key={index}>
+              <td>
                 <input
                   name="name"
                   data-id={index}
@@ -110,8 +113,8 @@ function Menu() {
                   value={item.name}
                   onChange={handleCostsChange}
                 />
-              </div>
-              <div className="table-data">
+              </td>
+              <td>
                 <input
                   name="cost"
                   data-id={index}
@@ -119,24 +122,20 @@ function Menu() {
                   value={item.cost}
                   onChange={handleCostsChange}
                 />
-              </div>
-            </div>
+              </td>
+            </tr>
           ))}
-          <div className="table-row">
-            <div className="table-data">
-              <button onClick={addNewCost}>Add Participant</button>
-            </div>
-          </div>
-        </div>
-        <div className="table-footer">
-          <div className="table-row">
-            <div className="table-data">
-              <button onClick={calculateCosts}>Calculate</button>
-            </div>
-          </div>
-        </div>
+        </tbody>
+      </Table>
       </div>
-    </div>
+      
+      <div className="add-participant-button">
+        <Button onClick={addNewCost}>Add Participant</Button>
+      </div>
+      <div>
+        <Button onClick={calculateCosts}>Calculate Individual Costs</Button>
+      </div>
+    </Container>
   );
 }
 
