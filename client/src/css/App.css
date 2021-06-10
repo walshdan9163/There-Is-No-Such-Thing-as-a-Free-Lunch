@@ -2,31 +2,22 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .App-header {
   background-color: #286FB4;
-  min-height: 15vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-body {
-  background-color: #E2F0F9;
-  min-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  margin-bottom: 5vh;
   color: white;
 }
 
 
+.footer{
+  position: fixed;
+  bottom: 0;
+  align-content: center;
+  text-align: center;
+  padding-bottom: 5vh;
+}

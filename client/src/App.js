@@ -1,6 +1,7 @@
 import React from 'react';
 import './css/App.css';
 import Menu from './components/menu';
+import Footer from './components/footer';
 
 function App() {
   return (
@@ -8,8 +9,9 @@ function App() {
       <header className="App-header">
         <h1>There Is No Such Thing as a Free Lunch</h1>
       </header>
-      <div className="App-body">
+      <div>
         <Menu />
+        <Footer />
       </div>
     </div>
   );

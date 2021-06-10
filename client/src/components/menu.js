@@ -1,13 +1,19 @@
 import React, {useState} from 'react';
 import '../css/menu.css';
 
-function CalculateValues(taxRate, prorate, tipAndFees, costs){
+import Container from 'react-bootstrap/Container';
+import Table from 'react-bootstrap/Table';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+
+function CalculateValues(prorate, totalMealCost, costs){
   return fetch('/api/calculate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({tax: taxRate, prorateChoice: prorate, tipAndFees: tipAndFees, individualCosts: costs}),
+    body: JSON.stringify({prorateChoice: prorate, totalMealCost: totalMealCost, individualCosts: costs}),
   })
     .then(response => response.json())
     .then(data => {
@@ -18,23 +24,23 @@ function CalculateValues(taxRate, prorate, tipAndFees, costs){
 const defaultCost = [
   {
     name: "Name",
-    cost: 0
+    cost: 0,
+    totalIndMealCost: 0
   }
 ];
 
 function Menu() {
 
   const [costs, setCosts] = useState(defaultCost);
-  const [tipAndFees, setTipAndFees] = useState(0);
+  const [totalMealCost, setTotalMealCost] = useState(0);
   const [prorate, setProrate] = useState(0);
+  const [totalIndMealCosts, setTotalIndMealCosts] = useState(defaultCost);
 
   const calculateCosts = () => {
-    const taxRate = 0.07;
     const prorated = prorate;
-    CalculateValues(taxRate, prorated, tipAndFees, costs)
+    CalculateValues(prorated, totalMealCost, costs)
       .then(values => {
         setCosts(values.costs);
-        setTipAndFees(values.tipAndFees);
       });
   }
 
@@ -45,98 +51,108 @@ function Menu() {
     setCosts(_tempCosts);
   };
 
-  const handleTipAndFeesChange = event => {
-    setTipAndFees(parseFloat(event.target.value));
+  const handleTotalMealCostChange = event => {
+    setTotalMealCost(parseFloat(event.target.value));
   }
 
   const handleProrateChange = event => {
-    console.log(event.target.checked);
     setProrate(event.target.checked);
   }
 
   const addNewCost = () => {
-    setCosts(prevCosts => [...prevCosts, {name: "Name", cost: 0}]);
+    setCosts(prevCosts => [...prevCosts, {name: "Name", cost: 0, totalIndMealCost: 0}]);
   };
 
+  const handleFocus = event => {
+    event.target.select();
+  }
+
   return (
-    <div className="table">
-      <div className="table-row">
-          <div className="table-data">
-            <div>Tip and Fees:</div>
-          </div>
-          <div className="table-data">
+    <Container>
+      <Row>
+        <Col>
+          <div className="total-meal-cost">
+            <h3>
+              Total Meal Cost:
+            </h3>
             <input
-              name="tipAndFees"
+              name="totalMealCost"
               type="number"
-              value={tipAndFees}
-              onChange={handleTipAndFeesChange}
-            />
-        </div>
-      </div>
-      <div className="prorate">
-        <div className="table-row">
-          <div className="table-data">
-            <div>Prorate?</div>
-          </div>
-          <div className="table-data">
-            <input
-              name="tipAndFees"
-              type="checkbox"
-              check={prorate.checked}
-              onChange={handleProrateChange}
+              value={totalMealCost}
+              onFocus={handleFocus}
+              onChange={handleTotalMealCostChange}
             />
           </div>
-        </div>
+        </Col>
+        <Col>
+          <div className="prorate">
+              <h3>
+                Prorate?*
+              </h3>
+              <input
+                name="prorate"
+                type="checkbox"
+                check={prorate.checked}
+                onChange={handleProrateChange}
+              />
+          </div>
+        </Col>
+      </Row>
+      <div>
+        <Table bordered hover>
+          <thead>
+            <tr>
+              <th>Participant Name</th>
+              <th>Meal Cost</th>
+              <th>Total Meal Cost</th>
+            </tr>
+          </thead>
+          <tbody className="scrollable-table">
+            {costs.map((item, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    name="name"
+                    data-id={index}
+                    type="text"
+                    value={item.name}
+                    onFocus={handleFocus}
+                    onChange={handleCostsChange}
+                  />
+                </td>
+                <td>
+                  <input
+                    name="cost"
+                    data-id={index}
+                    type="number"
+                    value={item.cost}
+                    onFocus={handleFocus}
+                    onChange={handleCostsChange}
+                  />
+                </td>
+                <td>
+                  <input
+                    name="totalIndMealCost"
+                    data-id={index}
+                    type="number"
+                    value={item.totalIndMealCost}
+                    onFocus={handleFocus}
+                    onChange={handleCostsChange}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
-      <div className="table-content">
-        <div className="table-header">
-          <div className="table-row">
-            <div className="table-data">
-              <div>Participant</div>
-            </div>
-            <div className="table-data">
-              <div>Meal Cost</div>
-            </div>
-          </div>
-        </div>
-        <div className="table-body">
-          {costs.map((item, index) => (
-            <div className="table-row" key={index}>
-              <div className="table-data">
-                <input
-                  name="name"
-                  data-id={index}
-                  type="text"
-                  value={item.name}
-                  onChange={handleCostsChange}
-                />
-              </div>
-              <div className="table-data">
-                <input
-                  name="cost"
-                  data-id={index}
-                  type="number"
-                  value={item.cost}
-                  onChange={handleCostsChange}
-                />
-              </div>
-            </div>
-          ))}
-          <div className="table-row">
-            <div className="table-data">
-              <button onClick={addNewCost}>Add Participant</button>
-            </div>
-          </div>
-        </div>
-        <div className="table-footer">
-          <div className="table-row">
-            <div className="table-data">
-              <button onClick={calculateCosts}>Calculate</button>
-            </div>
-          </div>
-        </div>
+      
+      <div className="add-participant-button">
+        <Button onClick={addNewCost}>Add Participant</Button>
       </div>
-    </div>
+      <div>
+        <Button onClick={calculateCosts}>Calculate Individual Costs</Button>
+      </div>
+    </Container>
   );
 }
 
