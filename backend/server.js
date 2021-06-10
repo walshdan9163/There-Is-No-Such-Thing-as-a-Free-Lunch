@@ -1,11 +1,9 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const taxHandler = require('./taxHandler.js');
 
 const app = express();
 const bodyParser = require('body-parser');
-const e = require("express");
 
 app.set("port", process.env.PORT || 3001);
 app.use(bodyParser.json());
@@ -13,10 +11,10 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../build')));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname+'/../client/build/index.html'));
+    res.sendFile(path.join(__dirname, '../build/index.html'));
   });
 
 app.post("/api/calculate", (req, res) => {
