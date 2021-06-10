@@ -1,6 +1,7 @@
 import React from 'react';
 import './css/App.css';
 import Menu from './components/menu';
+import Footer from './components/footer';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       </header>
       <div>
         <Menu />
+        <Footer />
       </div>
     </div>
   );

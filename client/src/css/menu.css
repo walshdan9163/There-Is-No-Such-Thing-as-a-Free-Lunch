@@ -1,5 +1,4 @@
 table {
-  
   width: 100%;
   /* display: flex; */
 }
@@ -38,6 +37,10 @@ td {
   margin-bottom: 2vh;
 }
 
-.tips-and-fees{
+.total-meal-cost{
   margin-bottom: 1vh;
+}
+
+.individual-participants-table{
+  padding-top: 5%;
 }

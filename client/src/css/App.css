@@ -14,3 +14,10 @@
 }
 
 
+.footer{
+  position: fixed;
+  bottom: 0;
+  align-content: center;
+  text-align: center;
+  padding-bottom: 5vh;
+}

@@ -7,13 +7,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-function CalculateValues(taxRate, prorate, tipAndFees, costs){
+function CalculateValues(prorate, totalMealCost, costs){
   return fetch('/api/calculate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({tax: taxRate, prorateChoice: prorate, tipAndFees: tipAndFees, individualCosts: costs}),
+    body: JSON.stringify({prorateChoice: prorate, totalMealCost: totalMealCost, individualCosts: costs}),
   })
     .then(response => response.json())
     .then(data => {
@@ -24,23 +24,23 @@ function CalculateValues(taxRate, prorate, tipAndFees, costs){
 const defaultCost = [
   {
     name: "Name",
-    cost: 0
+    cost: 0,
+    totalIndMealCost: 0
   }
 ];
 
 function Menu() {
 
   const [costs, setCosts] = useState(defaultCost);
-  const [tipAndFees, setTipAndFees] = useState(0);
+  const [totalMealCost, setTotalMealCost] = useState(0);
   const [prorate, setProrate] = useState(0);
+  const [totalIndMealCosts, setTotalIndMealCosts] = useState(defaultCost);
 
   const calculateCosts = () => {
-    const taxRate = 0.07;
     const prorated = prorate;
-    CalculateValues(taxRate, prorated, tipAndFees, costs)
+    CalculateValues(prorated, totalMealCost, costs)
       .then(values => {
         setCosts(values.costs);
-        setTipAndFees(values.tipAndFees);
       });
   }
 
@@ -51,39 +51,43 @@ function Menu() {
     setCosts(_tempCosts);
   };
 
-  const handleTipAndFeesChange = event => {
-    setTipAndFees(parseFloat(event.target.value));
+  const handleTotalMealCostChange = event => {
+    setTotalMealCost(parseFloat(event.target.value));
   }
 
   const handleProrateChange = event => {
-    console.log(event.target.checked);
     setProrate(event.target.checked);
   }
 
   const addNewCost = () => {
-    setCosts(prevCosts => [...prevCosts, {name: "Name", cost: 0}]);
+    setCosts(prevCosts => [...prevCosts, {name: "Name", cost: 0, totalIndMealCost: 0}]);
   };
+
+  const handleFocus = event => {
+    event.target.select();
+  }
 
   return (
     <Container>
       <Row>
         <Col>
-          <div className="tips-and-fees">
+          <div className="total-meal-cost">
             <h3>
-              Tip and Fees:
+              Total Meal Cost:
             </h3>
             <input
-              name="tipAndFees"
+              name="totalMealCost"
               type="number"
-              value={tipAndFees}
-              onChange={handleTipAndFeesChange}
+              value={totalMealCost}
+              onFocus={handleFocus}
+              onChange={handleTotalMealCostChange}
             />
           </div>
         </Col>
         <Col>
           <div className="prorate">
               <h3>
-                Split tips and fees proportionally?
+                Prorate?*
               </h3>
               <input
                 name="prorate"
@@ -95,38 +99,51 @@ function Menu() {
         </Col>
       </Row>
       <div>
-      <Table bordered hover>
-        <thead>
-          <tr>
-            <th>Participant Name</th>
-            <th>Meal Cost</th>
-          </tr>
-        </thead>
-        <tbody className="scrollable-table">
-          {costs.map((item, index) => (
-            <tr key={index}>
-              <td>
-                <input
-                  name="name"
-                  data-id={index}
-                  type="text"
-                  value={item.name}
-                  onChange={handleCostsChange}
-                />
-              </td>
-              <td>
-                <input
-                  name="cost"
-                  data-id={index}
-                  type="number"
-                  value={item.cost}
-                  onChange={handleCostsChange}
-                />
-              </td>
+        <Table bordered hover>
+          <thead>
+            <tr>
+              <th>Participant Name</th>
+              <th>Meal Cost</th>
+              <th>Total Meal Cost</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody className="scrollable-table">
+            {costs.map((item, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    name="name"
+                    data-id={index}
+                    type="text"
+                    value={item.name}
+                    onFocus={handleFocus}
+                    onChange={handleCostsChange}
+                  />
+                </td>
+                <td>
+                  <input
+                    name="cost"
+                    data-id={index}
+                    type="number"
+                    value={item.cost}
+                    onFocus={handleFocus}
+                    onChange={handleCostsChange}
+                  />
+                </td>
+                <td>
+                  <input
+                    name="totalIndMealCost"
+                    data-id={index}
+                    type="number"
+                    value={item.totalIndMealCost}
+                    onFocus={handleFocus}
+                    onChange={handleCostsChange}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
       
       <div className="add-participant-button">
