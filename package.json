@@ -9,7 +9,8 @@
   "devDependencies": {},
   "scripts": {
     "start": "node ./backend/server.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "build": "npm run build --prefix client"
   },
   "repository": {
     "type": "git",
