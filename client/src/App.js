@@ -18,10 +18,3 @@ function App() {
 }
 
 export default App;
-
-//COLOR SCHEME: 
-// Light blue: #E2FOF9
-// Teal: #B0DDE4
-// Deep Blue: 286FB4
-// White: FFFFFF
-// Red: DF4C73
