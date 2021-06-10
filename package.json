@@ -1,0 +1,23 @@
+{
+  "name": "lunch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "../lunch/client/App.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "cd client && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/walshdan9163/No-Such-Thing-as-a-Free-Lunch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/walshdan9163/No-Such-Thing-as-a-Free-Lunch/issues"
+  },
+  "homepage": "https://github.com/walshdan9163/No-Such-Thing-as-a-Free-Lunch#readme"
+}
